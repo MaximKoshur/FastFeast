@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-a6)e3zrjenuz8lwpephzxy*_51xla$tz%8gl=34+ndm53=!31t
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', '0.0.0.0']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '0.0.0.0', '172.25.0.2', '172.28.0.2']
 
 # Application definition
 
@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'fastfeast',
     'django.contrib.postgres',
 ]
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -89,7 +90,7 @@ DATABASES = {
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
 
-AUTH_USER_MODEL = 'fastfeast.User'
+# AUTH_USER_MODEL = 'fastfeast.User'
 
 AUTH_PASSWORD_VALIDATORS = [
     {

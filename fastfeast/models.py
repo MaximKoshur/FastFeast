@@ -1,12 +1,13 @@
 from django.db import models
-from django.contrib.auth.models import AbstractUser
+from .yamaps import geocoder
 
 
 class Dishes(models.Model):
     name = models.CharField(max_length=200)
     description = models.TextField()
     price = models.FloatField()
-    category = models.ForeignKey("CategoryDishes", on_delete=models.CASCADE)
+    category = models.ForeignKey("CategoryDishes", on_delete=models.CASCADE, related_name='dishes')
+    institution = models.ForeignKey("Institution", on_delete=models.CASCADE, related_name='dishes')
 
     class Meta:
         verbose_name_plural = 'Блюда'
@@ -33,7 +34,18 @@ class CategoryDishes(models.Model):
 class Institution(models.Model):
     name = models.CharField(max_length=200)
     description = models.TextField()
-    category = models.ForeignKey("CategoryInstitution", on_delete=models.CASCADE)
+    category = models.ForeignKey("CategoryInstitution", on_delete=models.CASCADE, related_name='institutions')
+    address = models.TextField(max_length=50)
+    latitude = models.FloatField()
+    longitude = models.FloatField()
+
+    def save(self, *args, **kwargs):
+        if self.address:
+            lat, lon = geocoder(self.address)
+            self.latitude = lat
+            self.longitude = lon
+
+        super(Institution, self).save(*args, **kwargs)
 
     class Meta:
         verbose_name_plural = 'Заведения'
@@ -56,52 +68,5 @@ class CategoryInstitution(models.Model):
         return self.name
 
 
-class Basket(models.Model):
-    class Status(models.TextChoices):
-        INITIAL = 'INITIAL', 'Initial'
-        COMPLETED = 'COMPLETED', 'Completed'
-        DELIVERED = 'DELIVERED', 'Delivered'
-
-    user = models.ForeignKey('User', on_delete=models.CASCADE, related_name='baskets')
-    status = models.CharField(max_length=20, choices=Status.choices, default=Status.INITIAL)
-
-    class Meta:
-        verbose_name_plural = 'Корзины покупок'
-        verbose_name = 'Корзина покупок'
-
-    # def __str__(self):
-    #     return self.name
-
-    def total_price(self):
-        total_price = 0
-        for entry in self.basket_product.all():
-            total_price += entry.dish.price * entry.count
-        return total_price
-
-    def total_count(self):
-        total_count = 0
-        for entry in self.basket_product.all():
-            total_count += entry.count
-        return total_count
 
 
-class BasketProduct(models.Model):
-    dish = models.ForeignKey(Dishes, on_delete=models.CASCADE, related_name='+')
-    count = models.IntegerField(default=0)
-    basket = models.ForeignKey(Basket, on_delete=models.CASCADE, related_name='basket_product')
-
-    class Meta:
-        verbose_name_plural = 'Блюда в корзинах'
-        verbose_name = 'Блюдо в корзине'
-
-    # def __str__(self):
-    #     return self.name
-
-
-class User(AbstractUser):
-    basket = models.OneToOneField(Basket, on_delete=models.SET_NULL,
-                                  null=True, blank=True, related_name='+')
-
-    class Meta:
-        verbose_name_plural = 'Пользователи'
-        verbose_name = 'Пользователь'

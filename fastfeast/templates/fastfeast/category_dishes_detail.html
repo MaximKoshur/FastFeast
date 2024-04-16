@@ -1,0 +1,32 @@
+{% extends 'fastfeast/base.html' %}
+{%block body%}
+{%if category.parent == None%}
+    <h1>{{category.name}}</h1>
+    {%for cat in sub_category%}
+        <ul>
+        <li>
+        <a href="{% url 'fastfeast:category_dishes_detail' cat.id%}">{{cat.name}}</a>
+        </li>
+        </ul>
+    {%endfor%}
+    <br>
+    {%for cat in sub_category%}
+        {%for dish in cat.dishes.all%}
+        <ul>
+        <li>
+            <a href="{% url 'fastfeast:dishes_detail' dish.id%}">{{dish.name}}</a>
+        </li>
+        </ul>
+        {%endfor%}
+    {%endfor%}
+{%else%}
+    <h1>{{category.name}}</h1>
+    {%for dish in dishes%}
+        <ul>
+        <li>
+            <a href="{% url 'fastfeast:dishes_detail' dish.id%}">{{dish.name}}</a>
+        </li>
+        </ul>
+    {%endfor%}
+{%endif%}
+{%endblock%}

@@ -1,0 +1,11 @@
+{% extends 'fastfeast/base.html' %}
+{%block body%}
+{%for institution in institutions%}
+        <ul>
+        <li>
+        <a href="{% url 'fastfeast:institution_detail' institution.id%}">{{institution.name}}</a>
+        </li>
+        </ul>{%endfor%}
+{%endblock%}
+</body>
+</html>
