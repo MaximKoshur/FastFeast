@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.postgres',
 ]
 
+AUTH_USER_MODEL = 'fastfeast.CustomUser'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

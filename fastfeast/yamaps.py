@@ -26,9 +26,9 @@ def generate_yandex_map_institution_html(lat1, lon1):
 
 def geocoder(address):
     my_geocoder = Yandex(api_key="dd817afb-e96a-4c3a-8592-8beb732d7227").geocode(str("Минск, Беларусь" + address))
-    print(my_geocoder.latitude)
-    print(my_geocoder.longitude)
-    print(my_geocoder.address)
+    # print(my_geocoder.latitude)
+    # print(my_geocoder.longitude)
+    # print(my_geocoder.address)
     return [my_geocoder.latitude, my_geocoder.longitude]
 
 

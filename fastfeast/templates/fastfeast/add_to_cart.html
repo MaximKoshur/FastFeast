@@ -1,0 +1,50 @@
+{% extends 'fastfeast/base.html' %}
+{% block body %}
+{% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+{{ message }}
+        {% endfor %}
+    </ul>
+{% endif %}
+<h1>Basket</h1>
+{%if basket%}
+<h2>Total price:{{price}}</h2>
+    <form action="{% url 'fastfeast:del_from_cart' %}" method="post">
+        {% csrf_token %}
+        {% for x in basket %}
+            <input type="hidden" name="product_id" value="{{ x.product.id }}">
+        {% endfor %}
+        <button type="submit">Remove all</button>
+    </form>
+{%endif%}
+<ul>
+    {%for x in basket%}
+        <li>
+            <a href="{% url 'fastfeast:dishes_detail' x.dish.id%}">{{x.dish.name}}</a>
+            {{x.count}}
+            <form action="{% url 'fastfeast:change_count' %}" method="post">
+              {% csrf_token %}
+              <input type="number" name="count" min="0" step="1">
+              <input type="submit" value="update" class="btn btn-danger"/>
+              <input type="hidden" name="dish_id" value="{{ x.dish.id }}">
+            </form>
+            <form action="{% url 'fastfeast:del_from_cart' %}" method="post">
+              {% csrf_token %}
+              <input type="hidden" name="dish_id" value="{{ x.dish.id }}">
+              <button type="submit">Remove</button>
+            </form>
+        </li>
+
+    {%empty%}
+    Нет товаров
+    {%endfor%}
+
+</ul>
+{%if basket%}
+<form action="{% url 'fastfeast:completed_order' %}" method="post">
+              {% csrf_token %}
+                  <button type="submit">Checkout</button>
+            </form>
+{%endif%}
+{%endblock%}
