@@ -1,0 +1,36 @@
+{% extends 'fastfeast/base.html' %}
+{% block body %}
+<h1>Orders History:</h1>
+
+    {%for order in orders%}
+        {%for order_entry in order.order_entries.all%}
+        <a href="{% url 'fastfeast:dishes_detail' order_entry.dish.id%}">{{order_entry.dish.name}}</a>
+            / {{order_entry.count}}
+            <br>
+            Description: {{order_entry.dish.description}}
+            <br>
+        {%endfor%}
+    Total Count: {{order.total_count}}
+    <br>
+    Total Cost: {{order.total_price}}
+    <br>
+    STATUS: {{order.status}}
+    <br>
+    <form action="{% url 'fastfeast:repeat_order' %}" method="post">
+                {% csrf_token %}
+                <input type="hidden" name="order_id" value="{{order.id}}" />
+                <input type="submit" value="Repeat Order " class="btn btn-danger"/>
+    </form>
+    <br>
+    <br>
+{%endfor%}
+<div class="btn-group">
+    <ul>
+        {% for p in context.page_range %}
+            <li style="display: inline; margin-right: 10px;">
+                <a href="{% url 'fastfeast:orders_history' p %}">{{ p }}</a>
+            </li>
+        {% endfor %}
+    </ul>
+</div>
+{%endblock%}

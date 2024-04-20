@@ -1,4 +1,33 @@
 {% extends 'fastfeast/base.html' %}
 {%block body%}
-    {{profile.user.username}}
+<br>
+<a href="{% url 'fastfeast:orders_history'%}">Orders History</a>
+<h1>Profile</h1>
+First name:{{profile.user.first_name}}
+<form action="{% url 'fastfeast:change_profile' %}" method="post">
+    {% csrf_token %}
+    <input type="text" name="first_name">
+    <input type="submit" value="update" class="btn btn-danger"/>
+</form>
+<br>
+Last name:{{profile.user.last_name}}
+<form action="{% url 'fastfeast:change_profile' %}" method="post">
+    {% csrf_token %}
+    <input type="text" name="last_name">
+    <input type="submit" value="update" class="btn btn-danger"/>
+</form>
+<br>
+Email:{{profile.user.email}}
+<form action="{% url 'fastfeast:change_profile' %}" method="post">
+    {% csrf_token %}
+    <input type="text" name="email">
+    <input type="submit" value="update" class="btn btn-danger"/>
+</form>
+<br>
+Address:{{profile.user.address}}
+<form action="{% url 'fastfeast:change_profile' %}" method="post">
+    {% csrf_token %}
+    <input type="text" name="address">
+    <input type="submit" value="update" class="btn btn-danger"/>
+</form>
 {%endblock%}

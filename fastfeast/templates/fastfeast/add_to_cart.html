@@ -13,7 +13,7 @@
     <form action="{% url 'fastfeast:del_from_cart' %}" method="post">
         {% csrf_token %}
         {% for x in basket %}
-            <input type="hidden" name="product_id" value="{{ x.product.id }}">
+            <input type="hidden" name="dish_id" value="{{ x.dish.id }}">
         {% endfor %}
         <button type="submit">Remove all</button>
     </form>
@@ -46,5 +46,6 @@
               {% csrf_token %}
                   <button type="submit">Checkout</button>
             </form>
+{{ yamaps|safe }}
 {%endif%}
 {%endblock%}

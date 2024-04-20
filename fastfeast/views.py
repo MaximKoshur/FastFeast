@@ -1,9 +1,11 @@
+from .tasks import change_status
 from django.contrib.auth import login, authenticate, logout
+from django.core.paginator import Paginator
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.views.generic import CreateView
 from django.contrib import messages
-from .models import Dishes, CategoryDishes, CategoryInstitution, Institution, CustomUser, Order, OrderEntry, Profile
+from .models import Dishes, CategoryDishes, CategoryInstitution, Institution, Order, OrderEntry, Profile
 from .yamaps import generate_yandex_map_basket_html, generate_yandex_map_institution_html
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
@@ -104,9 +106,14 @@ def add_to_cart(request):
             profile = get_object_or_404(Profile, user=request.user)
         except:
             profile = Profile.objects.create(user=request.user)
-        if not profile.shopping_cart or profile.shopping_cart.status == 'DELIVERED':
+        if not profile.shopping_cart or profile.shopping_cart.status in ['DELIVERED', 'PREPARE', 'ONTHEWAY']:
             profile.shopping_cart = Order.objects.create(profile=profile)
             profile.save()
+        institutions = [x.dish.institution for x in profile.shopping_cart.order_entries.all()]
+        if OrderEntry.objects.filter(order=profile.shopping_cart.id) and (dish.institution not in institutions):
+            messages.warning(request, 'Вы не можете добавить блюдо другого ресторана!')
+            return redirect('fastfeast:add_to_cart')
+
         try:
             order_entry = get_object_or_404(OrderEntry, order=profile.shopping_cart, dish=dish)
         except:
@@ -123,8 +130,15 @@ def add_to_cart(request):
             profile.shopping_cart = Order.objects.create(profile=profile)
             profile.save()
         basket = OrderEntry.objects.filter(order=profile.shopping_cart, order__status='INPROGRESS')
-        return render(request, 'fastfeast/add_to_cart.html',
-                      {'basket': basket, 'price': profile.shopping_cart.total_price()})
+        if basket:
+            lat = profile.shopping_cart.order_entries.first().dish.institution.latitude
+            lon = profile.shopping_cart.order_entries.first().dish.institution.longitude
+            return render(request, 'fastfeast/add_to_cart.html',
+                          {'basket': basket, 'price': profile.shopping_cart.total_price(),
+                                   'yamaps': generate_yandex_map_basket_html(request.user.latitude, request.user.longitude, lat, lon)})
+        else:
+            return render(request, 'fastfeast/add_to_cart.html',
+                          {'basket': basket, 'price': profile.shopping_cart.total_price()})
 
 
 @login_required
@@ -161,7 +175,55 @@ def change_count(request):
 def completed_order(request):
     if request.method == 'POST':
         profile = Profile.objects.get(user=request.user)
-        profile.shopping_cart.status = 'PREPARE'
-        profile.shopping_cart.save()
+        order = profile.shopping_cart
+        order.status = 'PREPARE'
+        order.save()
+        change_status.delay(order.id)
         messages.success(request, 'Your order has been placed!')
+        return redirect('fastfeast:add_to_cart')
+
+
+@login_required
+def change_profile(request):
+    if request.method == 'POST':
+        profile = Profile.objects.get(user=request.user)
+        if 'first_name' in request.POST:
+            first_name = request.POST['first_name']
+            profile.user.first_name = first_name
+            profile.user.save()
+        if 'last_name' in request.POST:
+            last_name = request.POST['last_name']
+            profile.user.last_name = last_name
+            profile.user.save()
+        if 'email' in request.POST:
+            email = request.POST['email']
+            profile.user.email = email
+            profile.user.save()
+        if 'address' in request.POST:
+            address = request.POST['address']
+            profile.user.address = address
+            profile.user.save()
+        return redirect('fastfeast:profile')
+
+
+@login_required
+def orders_history(request, page_number=1):
+    profile = Profile.objects.get(user=request.user)
+    completed_orders = Paginator(Order.objects.filter(status='DELIVERED', profile=profile).order_by('-id')[:5], 3)
+    page_obj = completed_orders.get_page(page_number)
+    return render(request, 'fastfeast/orders_history.html', {'context': completed_orders, 'orders': page_obj})
+
+
+@login_required
+def repeat_order(request):
+    if request.method == 'POST':
+        order_id = request.POST['order_id']
+        profile = Profile.objects.get(user=request.user)
+        order = Order.objects.get(id=order_id, profile=profile)
+        new_order = Order.objects.create(profile=profile, status='INPROGRESS')
+        order_entries = OrderEntry.objects.filter(order=order)
+        for entry in order_entries:
+            OrderEntry.objects.create(order=new_order, dish=entry.dish, count=entry.count)
+        profile.shopping_cart = new_order
+        profile.save()
         return redirect('fastfeast:add_to_cart')

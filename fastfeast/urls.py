@@ -7,6 +7,7 @@ app_name = 'fastfeast'
 urlpatterns = [
     path('', views.main, name='main'),
     path('profile/', views.profile_page, name="profile"),
+    path('change_profile', views.change_profile, name='change_profile'),
     path('registration/', views.Registration.as_view(), name="registration"),
     path('login/', LoginView.as_view(template_name='fastfeast/login.html'), name='login'),
     path('logout/', LogoutView.as_view(), name='logout'),
@@ -18,4 +19,7 @@ urlpatterns = [
     path('change_count', views.change_count, name='change_count'),
     path('del_from_cart', views.del_from_cart, name='del_from_cart'),
     path('add_to_cart', views.add_to_cart, name="add_to_cart"),
+    path('orders_history/page=<int:page_number>', views.orders_history, name='orders_history'),
+    path('repeat_order', views.repeat_order, name='repeat_order'),
+    path('orders_history', views.orders_history, name='orders_history'),
 ]

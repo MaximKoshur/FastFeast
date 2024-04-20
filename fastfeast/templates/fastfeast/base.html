@@ -17,6 +17,7 @@
         </form>
 <br>
 <a href="{% url 'fastfeast:profile' %}">Profile</a>
+<a href="{% url 'fastfeast:orders_history' %}">Orders History</a>
 {%if user.is_authenticated%}
 <a href="{% url 'fastfeast:add_to_cart'%}">Basket</a>
 {%endif%}
