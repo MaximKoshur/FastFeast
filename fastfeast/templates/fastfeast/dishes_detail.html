@@ -1,16 +1,33 @@
 {% extends 'fastfeast/base.html' %}
+{%load static%}
 {%block body%}
-    {{dish.name}}
+<link rel="stylesheet" href="{% static 'fastfeast/css/dishes_detail.css'%}">
+<h1>{{dish.name}}</h1>
+    <img class = "Food" src="{% static 'fastfeast/img/Food.jpg' %}" alt="Food">
+<div style="clear: both;"></div>
+<div class = "text">
+    Цена: {{dish.price}} руб.
     <br>
-    {{dish.price}}
+    Описание: {{dish.description}}
     <br>
-    {{dish.description}}
-    <br>
+    <div class="location-container">
+    Категория:  <form action="{% url 'fastfeast:category_dishes_detail' dish.category.id%}?next={{ request.path }}" method="get">
+                {% csrf_token %}
+                <input type="submit" value="{{dish.category.name}}" class="button"/>
+            </form>
+    </div>
+    <div class="location-container">
+    Заведение:  <form action="{% url 'fastfeast:institution_detail' dish.institution.id%}?next={{ request.path }}" method="post">
+                {% csrf_token %}
+                <input type="submit" value="{{dish.institution.name}}" class="button"/>
+            </form>
+    </div>
+</div>
 {% if user.is_authenticated %}
             <form action="{% url 'fastfeast:add_to_cart' %}?next={{ request.path }}" method="post">
                 {% csrf_token %}
                 <input type="hidden" name="id" value="{{dish.id}}" />
-                <input type="submit" value="add_to_cart" class="btn btn-danger"/>
+                <input type="submit" value="Добавить в корзину" class="button"/>
             </form>
         {% endif%}
 {%endblock%}

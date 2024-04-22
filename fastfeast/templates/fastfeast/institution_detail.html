@@ -1,18 +1,88 @@
 {% extends 'fastfeast/base.html' %}
+{%load static%}
 {%block body%}
 <h1>{{institution.name}}</h1>
+<link rel="stylesheet" href="{% static 'fastfeast/css/institution_detail.css'%}">
 {%if not dishes%}
     К сожалению разработчик сюда ничего не добавил(
 {%else%}
     {%for dish in dishes%}
             <ul>
-            <li>
-                <a href="{% url 'fastfeast:dishes_detail' dish.id%}">{{dish.name}}</a>
+            <li class="product-wrapper">
+                <a class = "dish" href="{% url 'fastfeast:dishes_detail' dish.id%}"><img class = "product-photo" src="{% static 'fastfeast/img/Food.jpg' %}" alt="Food">
+                    <div class="text">
+                        {{dish.name}}</div></a>
             </li>
             </ul>
     {%endfor%}
 {%endif%}
-{{ yamaps|safe }}
+<div style="clear: both;"></div>
+
+<div class="location-container">
+        <h2>Наше местоположение</h2>
+    <div class="description">
+        <h2>Описание</h2>
+    </div>
+</div>
+
+<div style="clear: both;"></div>
+
+<div class="location-container">
+    <div class="map">
+        {{ yamaps|safe }}
+    </div>
+    <div class = "description_text">
+        {{institution.description}}
+    </div>
+</div>
+
+<div style="clear: both;"></div>
+
+    <h1>Комментарии</h1>
+
+
+<form class="comment-form" action="{% url 'fastfeast:add_comment' %}" method="post">
+    {% csrf_token %}
+    <input type="text" name="text" class="comment-input">
+    <input type="submit" value="Отправить" class="button">
+    <input type="hidden" name="institution_id" value="{{institution.id}}">
+</form>
+
+{% if comments %}
+    {% for comment in comments %}
+        <div class="comment">
+            <span class="comment-user">Автор: {{ comment.profile.user.first_name }}</span>
+            <div class="comment-text">{{ comment.text }}</div>
+            <br>
+            <button onclick="toggleReplyForm({{ comment.id }})" class="reply-btn">Ответить</button>
+            <div id="replyForm_{{ comment.id }}" class="reply-form">
+                <form action="{% url 'fastfeast:add_comment' %}" method="post">
+                    {% csrf_token %}
+                    <input type="text" name="text" class="comment-input">
+                    <input type="submit" value="Отправить" class="button">
+                    <input type="hidden" name="institution_id" value="{{ institution.id }}">
+                    <input type="hidden" name="parent_id" value="{{ comment.id }}">
+                </form>
+            </div>
+            <br>
+            {% for child in comment.children.all %}
+                <div class="comment">
+                    <span class="comment-user">Автор: {{ child.profile.user.first_name }}</span>
+                    <div class="comment-text">{{ child.text }}</div>
+                </div>
+            {% endfor %}
+        </div>
+    {% endfor %}
+{% else %}
+    На данный момент комментариев нет
+{% endif %}
+
+
+
+<script>
+    function toggleReplyForm(commentId) {
+        const replyForm = document.getElementById(`replyForm_${commentId}`);
+        replyForm.style.display = replyForm.style.display === 'none' ? 'block' : 'none';
+    }
+</script>
 {%endblock%}
-</body>
-</html>

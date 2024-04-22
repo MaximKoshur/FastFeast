@@ -1,0 +1,79 @@
+body, html {
+    height: 100%; /* Устанавливаем высоту на 100% */
+    margin: 0; /* Убираем внешние отступы */
+    padding: 0; /* Убираем внутренние отступы */
+}
+
+body {
+    background-image: url('/static/fastfeast/img/Back10.jpg');
+    background-size: 100% 100%; /* Растягиваем изображение до конца экрана */
+    background-repeat: repeat; /* Отключение повторения изображения */
+    background-position: center center; /* Выравнивание изображения по центру */
+}
+
+
+aside {
+display: flex;
+justify-content: flex-end;
+background-color: #242426;
+padding: 0px;
+}
+
+.head {
+float: left;
+color: #efd3a2;
+padding: 20px;
+font-size: 16px;
+text-transform: uppercase;
+text-decoration: none;
+font-family: 'Montserrat', sans-serif;
+transition: all 0.3s ease;
+}
+
+.head:hover {
+  transform: scale(1.2);
+}
+
+.box {
+    display: inline-block; /* Делаем элемент блочным */
+    text-decoration: none; /* Убираем подчеркивание у ссылки */
+}
+
+.box input[type="submit"] {
+    border: none; /* Убираем границу у кнопки */
+    background: none; /* Убираем фоновый цвет */
+
+    outline: none; /* Убираем обводку при фокусе */
+    appearance: none; /* Убираем стандартный стиль кнопки */
+    -webkit-appearance: none; /* Для старых версий Chrome и Safari */
+    -moz-appearance: none; /* Для Firefox */
+}
+
+.Logo {
+    width: 100px;
+    height: auto; /* Автоматическое вычисление высоты для сохранения пропорций */
+    max-width: 100%; /* Не более 100% ширины родительского элемента */
+    display: block; /* Сделать элемент блочным, чтобы корректно управлять размерами */
+    margin: 0 auto; /* Центрирование по горизонтали */
+    position: absolute;
+    top: -15px;
+    right: 1750px;
+    overflow: hidden;
+    -webkit-transition: all 0.5s ease;
+    transition: all 0.5s ease;
+}
+.Logo:hover {
+  border-radius: 50%;
+  -webkit-transform: rotate(360deg);
+          transform: rotate(360deg);
+}
+
+.search {
+float: left;
+color: #efd3a2;
+padding: 20px;
+font-size: 16px;
+text-transform: uppercase;
+text-decoration: none;
+font-family: 'Montserrat', sans-serif;
+}

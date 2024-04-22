@@ -1,11 +1,12 @@
 from django.contrib import admin
-from .models import Dishes, CategoryDishes, CategoryInstitution, Institution, Order, OrderEntry, Profile
+from .models import Dishes, CategoryDishes, CategoryInstitution, Institution, Order, OrderEntry, Profile, Comments
 
 admin.site.register(CategoryInstitution)
 admin.site.register(Institution)
 admin.site.register(Order)
 admin.site.register(OrderEntry)
 admin.site.register(Profile)
+admin.site.register(Comments)
 
 
 @admin.register(Dishes)

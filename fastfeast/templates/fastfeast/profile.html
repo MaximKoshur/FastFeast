@@ -1,7 +1,6 @@
 {% extends 'fastfeast/base.html' %}
 {%block body%}
 <br>
-<a href="{% url 'fastfeast:orders_history'%}">Orders History</a>
 <h1>Profile</h1>
 First name:{{profile.user.first_name}}
 <form action="{% url 'fastfeast:change_profile' %}" method="post">

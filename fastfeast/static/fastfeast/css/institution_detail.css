@@ -1,0 +1,179 @@
+h1 {
+    color: #efd3a2;  /* Цвет текста */
+    text-transform: uppercase;
+    text-decoration: none;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 32px; /* Размер шрифта */
+    font-weight: bold; /* Жирный шрифт */
+    text-align: center; /* Выравнивание текста по центру */
+    margin-top: 20px; /* Внешний отступ сверху */
+    margin-bottom: 20px; /* Внешний отступ снизу */
+}
+
+h2 {
+    color: #efd3a2;  /* Цвет текста */
+    text-transform: uppercase;
+    text-decoration: none;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 25px; /* Размер шрифта */
+    font-weight: bold; /* Жирный шрифт */
+    text-align: left; /* Выравнивание текста по центру */
+    margin-top: 20px; /* Внешний отступ сверху */
+    margin-bottom: 20px; /* Внешний отступ снизу */
+    margin-left: 300px; /* Внешний отступ снизу */
+}
+
+ul {
+    margin-left: 100px; /* Вы можете изменить значение отступа по вашему усмотрению */
+}
+
+.dish {
+    display: block; /* Используем Flexbox */
+    flex-direction: column; /* Столбцовая ориентация */
+    justify-content: center; /* Выравнивание по вертикали по центру */
+    align-items: center; /* Выравнивание по горизонтали по центру */
+    text-align: center;
+	border: 1px solid #efd3a2;
+	border-radius: 3px;
+	position: relative;
+	background: black;
+	margin: 0 20px 20px 0;
+	text-decoration: none;
+	color: #efd3a2;
+	z-index: 0;
+	height: 300px;
+    transition: all 0.3s ease;
+}
+
+.dish:hover {
+  transform: scale(1.05);
+}
+
+.product-wrapper {
+    float: left;
+	display: block;
+	width: 100%;
+	transition: width .2s;
+}
+
+
+@media only screen and (min-width: 1000px) {
+	.product-wrapper {
+		width: 30%;
+	}
+}
+
+.product-photo {
+    max-width: 100%; /* Максимальная ширина изображения */
+    height: auto;   /* Автоматическая высота для сохранения пропорций */
+    border-radius: 3px 3px 0 0; /* Если вы хотите скруглить верхние углы только у изображения */
+    display: block; /* Убираем возможные отступы, вызванные inline-block */
+}
+
+.text{
+    margin-top: 10px; /* Вы можете изменить значение отступа по вашему усмотрению */
+    сolor: #efd3a2;
+    font-size: 16px;
+    text-transform: uppercase;
+    text-decoration: none;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.map {
+    margin-left: 200px;
+}
+
+.location-container {
+    display: flex;
+}
+
+.map {
+    width: 60%; /* Ширина карты */
+    /* Другие стили для карты */
+}
+
+.description {
+    margin-left: 200px;
+
+    /* Другие стили для описания */
+}
+
+.description_text{
+    margin-left: -420px;
+    color: #efd3a2;  /* Цвет текста */
+    text-decoration: none;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 20px; /* Размер шрифта */
+    font-weight: bold; /* Жирный шрифт */
+    text-align: left; /* Выравнивание текста по центру */
+}
+
+
+
+/* Стили для основной формы комментария */
+form {
+    margin-bottom: 20px;
+}
+
+.reply-form {
+    margin-top: 10px;
+    display: none;
+}
+
+/* Стили для текстового поля и кнопок в форме */
+form input[type="text"],
+form input[type="submit"] {
+    margin-right: 10px;
+    padding: 5px 10px;
+    border: 1px solid #efd3a2;
+    border-radius: 4px;
+}
+
+/* Стили для кнопки "Ответить" */
+.button {
+    background-color: black;
+    color: white;
+    border: 1px solid #efd3a2;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+
+/* Стили для имени пользователя */
+.comment-user {
+    font-weight: bold;
+    color: #333;
+}
+
+/* Стили для текста комментария */
+.comment-text, .comment-child {
+    margin-top: 5px;
+    color: black; /* Текст комментариев белый */
+}
+
+.reply-btn {
+    background-color: black;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.comment, .reply-form {
+    border: 1px solid black;
+    border-radius: 4px;
+    padding: 10px;
+    background-color: #efd3a2;
+    margin-bottom: 15px;
+}
+
+.comment-form .comment-input {
+    width: 70%; /* Увеличиваем ширину текстового поля для комментария */
+}
+
+.comment-form .comment-btn {
+    width: 25%; /* Уменьшаем ширину кнопки */
+    border: 1px solid #efd3a2;
+}

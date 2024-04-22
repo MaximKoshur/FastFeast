@@ -1,0 +1,21 @@
+.login {
+position: absolute;
+top: 400px;
+right: 700px;
+color: white;
+padding: 20px;
+font-size: 16px;
+text-transform: uppercase;
+text-decoration: none;
+font-family: 'Montserrat', sans-serif;
+}
+
+/* Стили для кнопки "Ответить" */
+.enter{
+    background-color: black;
+    color: white;
+    border: 1px solid #efd3a2;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+}

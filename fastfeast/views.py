@@ -5,7 +5,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.views.generic import CreateView
 from django.contrib import messages
-from .models import Dishes, CategoryDishes, CategoryInstitution, Institution, Order, OrderEntry, Profile
+from .models import Dishes, CategoryDishes, CategoryInstitution, Institution, Order, OrderEntry, Profile, Comments
 from .yamaps import generate_yandex_map_basket_html, generate_yandex_map_institution_html
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
@@ -14,7 +14,12 @@ from django.contrib.auth.decorators import login_required
 
 
 class CustomUserCreationForm(UserCreationForm):
-    address = forms.CharField(max_length=30, required=False)
+    address = forms.CharField(max_length=30, required=False, label='Адрес')
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field in self.fields:
+            self.fields[field].help_text = ''
 
     class Meta(UserCreationForm.Meta):
         model = CustomUser
@@ -65,6 +70,7 @@ def institution_detail(request, institution_id: int):
     i = get_object_or_404(Institution, id=institution_id)
     context = {'institution': i,
                'dishes': Dishes.objects.filter(institution=i),
+               'comments': Comments.objects.filter(institution=i, parent=None),
                'yamaps': generate_yandex_map_institution_html(i.latitude, i.longitude)}
     return render(request, 'fastfeast/institution_detail.html', context)
 
@@ -227,3 +233,41 @@ def repeat_order(request):
         profile.shopping_cart = new_order
         profile.save()
         return redirect('fastfeast:add_to_cart')
+
+
+@login_required
+def add_comment(request):
+    if request.method == 'POST':
+        institution_id = request.POST['institution_id']
+        text = request.POST['text']
+        parent_id = request.POST.get('parent_id', None)
+        institution = get_object_or_404(Institution, id=institution_id)
+        profile = Profile.objects.get(user=request.user)
+        if parent_id:
+            parent = get_object_or_404(Comments, id=parent_id)
+            comment = Comments.objects.create(profile=profile, institution=institution, text=text, parent=parent)
+            comment.save()
+        else:
+            comment = Comments.objects.create(profile=profile, institution=institution, text=text)
+            comment.save()
+        return redirect('fastfeast:institution_detail', institution_id)
+
+
+def search(request):
+    if request.method == 'POST':
+        text = request.POST['text']
+        all_institutions = list()
+        all_dishes = list()
+        print("1111")
+        print(text)
+        for dish in Dishes.objects.all():
+            print(dish.name)
+            if dish.name.lower() == text.lower():
+                all_dishes.append(dish)
+
+        for institution in Institution.objects.all():
+            print(institution.name)
+            if institution.name.lower() == text.lower():
+                all_institutions.append(institution)
+
+        return render(request, 'fastfeast/search.html', {'dishes': all_dishes, 'institutions': all_institutions})

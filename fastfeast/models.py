@@ -119,3 +119,12 @@ class Profile(models.Model):
     def __str__(self):
         return self.user.username
 
+
+class Comments(models.Model):
+    institution = models.ForeignKey(Institution, on_delete=models.CASCADE, related_name="comments")
+    parent = models.ForeignKey('self', null=True, blank=True, related_name='children', on_delete=models.CASCADE)
+    profile = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name="comments")
+    text = models.TextField()
+
+    def __str__(self):
+        return f'Comment by {self.profile.user.first_name} on {self.institution.name}'
