@@ -1,32 +1,44 @@
 {% extends 'fastfeast/base.html' %}
+{%load static%}
 {%block body%}
+<link rel="stylesheet" href="{% static 'fastfeast/css/category_dishes_detail.css'%}">
 {%if category.parent == None%}
     <h1>{{category.name}}</h1>
-    {%for cat in sub_category%}
-        <ul>
-        <li>
-        <a href="{% url 'fastfeast:category_dishes_detail' cat.id%}">{{cat.name}}</a>
+    <ul class="category-list">
+    {% for cat in sub_category %}
+        <li class="category-item">
+            <form action="{% url 'fastfeast:category_dishes_detail' cat.id %}?next={{ request.path }}" method="get">
+                {% csrf_token %}
+                <input type="submit" value="{{ cat.name }}" class="button" />
+            </form>
         </li>
-        </ul>
-    {%endfor%}
+    {% endfor %}
+    </ul>
+
+<div style="clear: both;"></div>
+
     <br>
     {%for cat in sub_category%}
         {%for dish in cat.dishes.all%}
-        <ul>
-        <li>
-            <a href="{% url 'fastfeast:dishes_detail' dish.id%}">{{dish.name}}</a>
-        </li>
-        </ul>
+            <ul>
+            <li class="product-wrapper">
+                <a class = "dish" href="{% url 'fastfeast:dishes_detail' dish.id%}"><img class = "product-photo" src="{% static 'fastfeast/img/Food.jpg' %}" alt="Food">
+                    <div class="text">
+                        {{dish.name}}</div></a>
+            </li>
+            </ul>
         {%endfor%}
     {%endfor%}
 {%else%}
     <h1>{{category.name}}</h1>
     {%for dish in dishes%}
-        <ul>
-        <li>
-            <a href="{% url 'fastfeast:dishes_detail' dish.id%}">{{dish.name}}</a>
-        </li>
-        </ul>
+            <ul>
+            <li class="product-wrapper">
+                <a class = "dish" href="{% url 'fastfeast:dishes_detail' dish.id%}"><img class = "product-photo" src="{% static 'fastfeast/img/Food.jpg' %}" alt="Food">
+                    <div class="text">
+                        {{dish.name}}</div></a>
+            </li>
+            </ul>
     {%endfor%}
 {%endif%}
 {%endblock%}
