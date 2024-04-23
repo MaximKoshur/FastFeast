@@ -1,32 +1,30 @@
 {% extends 'fastfeast/base.html' %}
+{%load static%}
 {%block body%}
-<br>
+<link rel="stylesheet" href="{% static 'fastfeast/css/profile.css'%}">
 <h1>Profile</h1>
-First name:{{profile.user.first_name}}
 <form action="{% url 'fastfeast:change_profile' %}" method="post">
     {% csrf_token %}
-    <input type="text" name="first_name">
-    <input type="submit" value="update" class="btn btn-danger"/>
+    <input type="text" name="first_name" placeholder="Имя: {{profile.user.first_name}}">
+    <input type="submit" value="Обновить" class="button"/>
 </form>
 <br>
-Last name:{{profile.user.last_name}}
 <form action="{% url 'fastfeast:change_profile' %}" method="post">
     {% csrf_token %}
-    <input type="text" name="last_name">
-    <input type="submit" value="update" class="btn btn-danger"/>
+    <input type="text" name="last_name" placeholder="Фамилия: {{profile.user.last_name}}">
+    <input type="submit" value="Обновить" class="button"/>
 </form>
 <br>
-Email:{{profile.user.email}}
 <form action="{% url 'fastfeast:change_profile' %}" method="post">
     {% csrf_token %}
-    <input type="text" name="email">
-    <input type="submit" value="update" class="btn btn-danger"/>
+    <input type="text" name="email" placeholder="Email:{{profile.user.email}}">
+    <input type="submit" value="Обновить" class="button"/>
 </form>
 <br>
-Address:{{profile.user.address}}
+
 <form action="{% url 'fastfeast:change_profile' %}" method="post">
     {% csrf_token %}
-    <input type="text" name="address">
-    <input type="submit" value="update" class="btn btn-danger"/>
+    <input type="text" name="address" placeholder="Адресс: {{profile.user.address}}">
+    <input type="submit" value="Обновить" class="button"/>
 </form>
 {%endblock%}

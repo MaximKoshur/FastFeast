@@ -1,11 +1,17 @@
 {% extends 'fastfeast/base.html' %}
+{%load static%}
 {%block body%}
+<link rel="stylesheet" href="{% static 'fastfeast/css/category_institutions_detail.css'%}">
+    <h1>Cписок ресторанов</h1>
 {%for institution in institutions%}
         <ul>
-        <li>
-        <a href="{% url 'fastfeast:institution_detail' institution.id%}">{{institution.name}}</a>
-        </li>
-        </ul>{%endfor%}
+            <li class="product-wrapper">
+                <a class = "institution" href="{% url 'fastfeast:institution_detail' institution.id%}"><img class = "institution-photo" src="{% static 'fastfeast/img/institution.avif' %}" alt="Food">
+                    <div class="text">
+                        {{institution.name}}</div></a>
+            </li>
+        </ul>
+        {%endfor%}
 {%endblock%}
 </body>
 </html>

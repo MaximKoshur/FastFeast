@@ -10,21 +10,31 @@ h1 {
     margin-bottom: 20px; /* Внешний отступ снизу */
 }
 
-h2 {
-    color: #efd3a2;  /* Цвет текста */
-    text-transform: uppercase;
-    text-decoration: none;
-    font-family: 'Montserrat', sans-serif;
-    font-size: 25px; /* Размер шрифта */
-    font-weight: bold; /* Жирный шрифт */
-    text-align: left; /* Выравнивание текста по центру */
-    margin-top: 20px; /* Внешний отступ сверху */
-    margin-bottom: 20px; /* Внешний отступ снизу */
-    margin-left: 300px; /* Внешний отступ снизу */
+.category-list {
+    list-style-type: none; /* Убираем маркеры списка */
+    padding: 0; /* Убираем отступы */
+    margin: 0; /* Убираем отступы */
 }
 
-ul {
-    margin-left: 100px; /* Вы можете изменить значение отступа по вашему усмотрению */
+.category-item {
+    display: inline-block; /* Элементы списка в одну строку */
+    margin-right: 10px; /* Отступ между элементами списка */
+}
+
+.button {
+    font-size: 20px; /* Размер шрифта */
+    background-color: black;
+    color: white;
+    border: 1px solid #efd3a2;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-left: 320px; /* Внешний отступ сверху */
+ transition: all 0.3s ease;
+}
+
+.button:hover {
+  transform: scale(1.05);
 }
 
 .institution {
@@ -56,12 +66,12 @@ ul {
 	transition: width .2s;
 }
 
-
 @media only screen and (min-width: 1000px) {
 	.product-wrapper {
 		width: 30%;
 	}
 }
+
 
 .institution-photo {
     max-width: 100%; /* Максимальная ширина изображения */
@@ -70,39 +80,6 @@ ul {
     display: block; /* Убираем возможные отступы, вызванные inline-block */
 }
 
-.text{
-    margin-top: 0px; /* Вы можете изменить значение отступа по вашему усмотрению */
-    сolor: #efd3a2;
-    font-size: 16px;
-    text-transform: uppercase;
-    text-decoration: none;
-    font-family: 'Montserrat', sans-serif;
-}
-
-
-
-/* Стили для кнопки "Ответить" */
-.button {
-    background-color: black;
-    color: white;
-    border: 1px solid #efd3a2;
-    padding: 5px 10px;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-
-
-
-.category-list {
-    list-style-type: none; /* Убираем маркеры списка */
-    padding: 0; /* Убираем отступы */
-    margin: 0; /* Убираем отступы */
-    text-align: center; /* Выравнивание текста по центру */
-
-}
-
-.category-item {
-    display: inline-block; /* Элементы списка в одну строку */
-    margin-right: 10px; /* Отступ между элементами списка */
+ul {
+    margin-left: 100px; /* Вы можете изменить значение отступа по вашему усмотрению */
 }

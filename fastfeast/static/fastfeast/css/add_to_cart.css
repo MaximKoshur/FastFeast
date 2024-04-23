@@ -1,0 +1,50 @@
+h1 {
+    color: #efd3a2;  /* Цвет текста */
+    text-transform: uppercase;
+    text-decoration: none;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 32px; /* Размер шрифта */
+    font-weight: bold; /* Жирный шрифт */
+    text-align: center; /* Выравнивание текста по центру */
+    margin-top: 20px; /* Внешний отступ сверху */
+    margin-bottom: 20px; /* Внешний отступ снизу */
+}
+
+h2 {
+    color: #efd3a2;  /* Цвет текста */
+    text-decoration: none;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 27px; /* Размер шрифта */
+    font-weight: bold; /* Жирный шрифт */
+    margin-top: 20px; /* Внешний отступ сверху */
+    margin-bottom: 20px; /* Внешний отступ снизу */
+}
+
+.button {
+    font-size: 15px; /* Размер шрифта */
+    background-color: black;
+    color: white;
+    border: 1px solid #efd3a2;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-left: 0px; /* Внешний отступ сверху */
+ transition: all 0.3s ease;
+}
+
+.button:hover {
+  transform: scale(1.05);
+}
+
+.text{
+    margin-top: 10px; /* Вы можете изменить значение отступа по вашему усмотрению */
+    color: #efd3a2;
+    font-size: 16px;
+
+    text-decoration: none;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.location-container {
+    display: flex;
+}

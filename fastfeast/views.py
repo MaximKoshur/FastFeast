@@ -117,8 +117,15 @@ def add_to_cart(request):
             profile.save()
         institutions = [x.dish.institution for x in profile.shopping_cart.order_entries.all()]
         if OrderEntry.objects.filter(order=profile.shopping_cart.id) and (dish.institution not in institutions):
-            messages.warning(request, 'Вы не можете добавить блюдо другого ресторана!')
-            return redirect('fastfeast:add_to_cart')
+            should_show_modal = True
+            basket = OrderEntry.objects.filter(order=profile.shopping_cart, order__status='INPROGRESS')
+            lat = profile.shopping_cart.order_entries.first().dish.institution.latitude
+            lon = profile.shopping_cart.order_entries.first().dish.institution.longitude
+            return render(request, 'fastfeast/add_to_cart.html',{'basket': basket, 'price': profile.shopping_cart.total_price(),
+                               'yamaps': generate_yandex_map_basket_html(request.user.latitude, request.user.longitude, lat, lon),
+                               'should_show_modal': should_show_modal, 'dish_id': dish_id})
+            # messages.warning(request, 'Вы не можете добавить блюдо другого ресторана!')
+            # return redirect('fastfeast:add_to_cart')
 
         try:
             order_entry = get_object_or_404(OrderEntry, order=profile.shopping_cart, dish=dish)
@@ -145,6 +152,21 @@ def add_to_cart(request):
         else:
             return render(request, 'fastfeast/add_to_cart.html',
                           {'basket': basket, 'price': profile.shopping_cart.total_price()})
+
+
+@login_required
+def add_or_delete(request):
+    if request.method == "POST":
+        dish_id = request.POST["dish_id"]
+        dish = Dishes.objects.get(id=dish_id)
+        if request.POST["yes"]:
+            profile = get_object_or_404(Profile, user=request.user)
+            OrderEntry.objects.filter(order=profile.shopping_cart).delete()
+            profile.shopping_cart.save()
+            OrderEntry.objects.create(order=profile.shopping_cart, dish=dish, count=1)
+            return redirect('fastfeast:add_to_cart')
+        elif request.POST["no"]:
+            return redirect('fastfeast:dishes_detail', dish=dish)
 
 
 @login_required
@@ -262,12 +284,12 @@ def search(request):
         print(text)
         for dish in Dishes.objects.all():
             print(dish.name)
-            if dish.name.lower() == text.lower():
+            if (dish.name.lower() == text.lower()) or str(dish.name.lower()).find(text.lower()) != -1:
                 all_dishes.append(dish)
 
         for institution in Institution.objects.all():
             print(institution.name)
-            if institution.name.lower() == text.lower():
+            if (institution.name.lower() == text.lower()) or str(institution.name.lower()).find(text.lower()) != -1:
                 all_institutions.append(institution)
 
         return render(request, 'fastfeast/search.html', {'dishes': all_dishes, 'institutions': all_institutions})

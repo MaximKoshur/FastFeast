@@ -1,25 +1,44 @@
 {% extends 'fastfeast/base.html' %}
+{%load static%}
 {% block body %}
-<h1>Orders History:</h1>
-
+<link rel="stylesheet" href="{% static 'fastfeast/css/orders_history.css'%}">
+<h1>История Заказов</h1>
+{%if not orders%}
+<div class="text">
+        На данный момент у вас не было заказов
+    </div>
+{%endif%}
     {%for order in orders%}
         {%for order_entry in order.order_entries.all%}
-        <a href="{% url 'fastfeast:dishes_detail' order_entry.dish.id%}">{{order_entry.dish.name}}</a>
-            / {{order_entry.count}}
+            <form action="{% url 'fastfeast:dishes_detail' order_entry.dish.id %}?next={{ request.path }}" method="get">
+                {% csrf_token %}
+                <input type="submit" value="{{order_entry.dish.name}}" class="button" />
+            </form>
+    <div class="text">
+            Колличество товара: {{order_entry.count}}
             <br>
-            Description: {{order_entry.dish.description}}
+            <div class="location-container">
+                Заведение:<form action="{% url 'fastfeast:institution_detail' order_entry.dish.institution.id%}?next={{ request.path }}" method="post">
+                    {% csrf_token %}
+                    <input type="submit" value="{{order_entry.dish.institution.name}}" class="button"/>
+                </form>
+            </div>
+            Описание товара: {{order_entry.dish.description}}
             <br>
+    </div>
         {%endfor%}
-    Total Count: {{order.total_count}}
     <br>
-    Total Cost: {{order.total_price}}
-    <br>
-    STATUS: {{order.status}}
-    <br>
+    <div class="text">
+        Общее количество товаров: {{order.total_count}}
+        <br>
+        Общая стоимость: {{order.total_price}}
+        <br>
+        Статус Заказа: {{order.status}}
+    </div>
     <form action="{% url 'fastfeast:repeat_order' %}" method="post">
                 {% csrf_token %}
                 <input type="hidden" name="order_id" value="{{order.id}}" />
-                <input type="submit" value="Repeat Order " class="btn btn-danger"/>
+                <input type="submit" value="Повторить заказ" class="button"/>
     </form>
     <br>
     <br>
@@ -27,8 +46,11 @@
 <div class="btn-group">
     <ul>
         {% for p in context.page_range %}
-            <li style="display: inline; margin-right: 10px;">
-                <a href="{% url 'fastfeast:orders_history' p %}">{{ p }}</a>
+            <li style="display: inline; margin-right: 10px;" class = "pagination">
+                <form action="{% url 'fastfeast:orders_history' p  %}" method="get">
+                {% csrf_token %}
+                <input type="submit" value="{{p}}" class="button"/>
+    </form>
             </li>
         {% endfor %}
     </ul>

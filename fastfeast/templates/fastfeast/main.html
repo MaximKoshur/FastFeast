@@ -1,27 +1,48 @@
 {% extends 'fastfeast/base.html' %}
+{%load static%}
 {%block body%}
-<h1>Institutions:</h1>
+<link rel="stylesheet" href="{% static 'fastfeast/css/main.css'%}">
+
+<h1>Список категорий еды:</h1>
+    <ul class="category-list">
+    {% for cat in categories_dishes%}
+        <li class="category-item">
+            <form action="{% url 'fastfeast:category_dishes_detail' cat.id %}?next={{ request.path }}" method="get">
+                {% csrf_token %}
+                <input type="submit" value="{{ cat.name }}" class="button" />
+            </form>
+        </li>
+    {% endfor %}
+    </ul>
+
+  <h1>Cписок категорий ресторанов:</h1>
+        <ul class="category-list">
+            {%for cat in categories_institutions%}
+            <li class="category-item">
+                <form action="{% url 'fastfeast:category_institutions_detail' cat.id%}?next={{ request.path }}" method="get">
+                {% csrf_token %}
+                <input type="submit" value="{{ cat.name }}" class="button" />
+            </form>
+            </li>
+            {%endfor%}
+        </ul>
+
+
+
+    <h1>Cписок ресторанов:</h1>
 {%for institution in institutions%}
-    <ul>
-    <li>
-        <a href="{% url 'fastfeast:institution_detail' institution.id%}">{{institution.name}}</a>
-    </li>
-    </ul>
-{%endfor%}
-<h1>Cat_Institutions:</h1>
-{%for cat in categories_institutions%}
-    <ul>
-    <li>
-        <a href="{% url 'fastfeast:category_institutions_detail' cat.id%}">{{cat.name}}</a>
-    </li>
-    </ul>
-{%endfor%}
-<h1>Cat_Dishes:</h1>
-{%for cat in categories_dishes%}
-    <ul>
-    <li>
-        <a href="{% url 'fastfeast:category_dishes_detail' cat.id%}">{{cat.name}}</a>
-    </li>
-    </ul>
-{%endfor%}
+        <ul>
+            <li class="product-wrapper">
+                <a class = "institution" href="{% url 'fastfeast:institution_detail' institution.id%}"><img class = "institution-photo" src="{% static 'fastfeast/img/institution.avif' %}" alt="Food">
+                    <div class="text">
+                        {{institution.name}}</div></a>
+            </li>
+        </ul>
+        {%endfor%}
+
+
+
+
 {%endblock%}
+
+

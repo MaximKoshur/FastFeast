@@ -1,0 +1,27 @@
+h1 {
+    color: #efd3a2;  /* Цвет текста */
+    text-transform: uppercase;
+    text-decoration: none;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 32px; /* Размер шрифта */
+    font-weight: bold; /* Жирный шрифт */
+    text-align: center; /* Выравнивание текста по центру */
+    margin-top: 20px; /* Внешний отступ сверху */
+    margin-bottom: 20px; /* Внешний отступ снизу */
+}
+
+.button {
+    font-size: 20px; /* Размер шрифта */
+    background-color: black;
+    color: white;
+    border: 1px solid #efd3a2;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+
+ transition: all 0.3s ease;
+}
+
+.button:hover {
+  transform: scale(1.05);
+}

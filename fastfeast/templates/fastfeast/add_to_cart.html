@@ -1,50 +1,66 @@
 {% extends 'fastfeast/base.html' %}
+{%load static%}
 {% block body %}
-{% if messages %}
-    <ul class="messages">
-        {% for message in messages %}
-{{ message }}
-        {% endfor %}
-    </ul>
+<link rel="stylesheet" href="{% static 'fastfeast/css/add_to_cart.css'%}">
+{% if should_show_modal %}
+    <div class="modal-content">
+        <form action="{% url 'fastfeast:add_or_delete' %}" method="post">
+            {% csrf_token %}
+            <div class="text">
+                Вы не можете добавить товары разных заведений. Хотите удалить текущие товары и добавить данный товар?
+            </div>>
+            <input type="hidden"  name="dish_id" value="{{ dish_id }}">
+
+            <input type="submit" value="Да" name = "yes" class="button">
+            <input type="submit" value="Нет" name = "no" class="button">
+        </form>
+    </div>
+
 {% endif %}
-<h1>Basket</h1>
+<h1>Корзина Покупок</h1>
 {%if basket%}
-<h2>Total price:{{price}}</h2>
+<h2>Общая стоимость:{{price}}</h2>
     <form action="{% url 'fastfeast:del_from_cart' %}" method="post">
         {% csrf_token %}
         {% for x in basket %}
             <input type="hidden" name="dish_id" value="{{ x.dish.id }}">
         {% endfor %}
-        <button type="submit">Remove all</button>
+        <button class="button" type="submit">Убрать все</button>
     </form>
+<br>
 {%endif%}
-<ul>
+
     {%for x in basket%}
-        <li>
-            <a href="{% url 'fastfeast:dishes_detail' x.dish.id%}">{{x.dish.name}}</a>
-            {{x.count}}
+            <form action="{% url 'fastfeast:dishes_detail' x.dish.id %}?next={{ request.path }}" method="get">
+                {% csrf_token %}
+                <input type="submit" value="{{x.dish.name}}" class="button" />
+            </form>
+            <div class="text">
+                Колличество товара: {{x.count}}
+            </div>
             <form action="{% url 'fastfeast:change_count' %}" method="post">
               {% csrf_token %}
               <input type="number" name="count" min="0" step="1">
-              <input type="submit" value="update" class="btn btn-danger"/>
+              <input type="submit" value="Обновить колличество" class="button"/>
               <input type="hidden" name="dish_id" value="{{ x.dish.id }}">
             </form>
             <form action="{% url 'fastfeast:del_from_cart' %}" method="post">
               {% csrf_token %}
               <input type="hidden" name="dish_id" value="{{ x.dish.id }}">
-              <button type="submit">Remove</button>
+              <button class = "button" type="submit">Убрать товар</button>
             </form>
-        </li>
+
 
     {%empty%}
-    Нет товаров
+    <div class="text">
+        Нет товаров
+    </div>
     {%endfor%}
 
-</ul>
 {%if basket%}
 <form action="{% url 'fastfeast:completed_order' %}" method="post">
               {% csrf_token %}
-                  <button type="submit">Checkout</button>
+                  <button class = "button" type="submit">Выполнить заказ</button>
             </form>
 {{ yamaps|safe }}
 {%endif%}
